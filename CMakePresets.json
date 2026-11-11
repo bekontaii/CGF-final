@@ -1,0 +1,16 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {"major": 3, "minor": 21, "patch": 0},
+  "configurePresets": [
+    {"name":"windows","displayName":"Windows 10 / Visual Studio 2022 x64","generator":"Visual Studio 17 2022","architecture":"x64","binaryDir":"${sourceDir}/build","cacheVariables":{"WEATHER_BUILD_TESTS":"ON"}},
+    {"name":"unix","displayName":"macOS or Linux Release","generator":"Unix Makefiles","binaryDir":"${sourceDir}/build","cacheVariables":{"CMAKE_BUILD_TYPE":"Release","WEATHER_BUILD_TESTS":"ON"}}
+  ],
+  "buildPresets": [
+    {"name":"windows","configurePreset":"windows","configuration":"Release"},
+    {"name":"unix","configurePreset":"unix"}
+  ],
+  "testPresets": [
+    {"name":"windows","configurePreset":"windows","configuration":"Release","output":{"outputOnFailure":true}},
+    {"name":"unix","configurePreset":"unix","output":{"outputOnFailure":true}}
+  ]
+}
