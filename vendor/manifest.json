@@ -1,0 +1,35 @@
+[
+  {
+    "name": "glfw",
+    "version": "3.4",
+    "url": "https://codeload.github.com/glfw/glfw/tar.gz/refs/tags/3.4",
+    "sha256": "c038d34200234d071fae9345bc455e4a8f2f544ab60150765d7704e08f3dac01"
+  },
+  {
+    "name": "glm",
+    "version": "1.0.1",
+    "url": "https://codeload.github.com/g-truc/glm/tar.gz/refs/tags/1.0.1",
+    "sha256": "9f3174561fd26904b23f0db5e560971cbf9b3cbda0b280f04d5c379d03bf234c"
+  },
+  {
+    "name": "imgui",
+    "version": "v1.91.9b",
+    "url": "https://codeload.github.com/ocornut/imgui/tar.gz/refs/tags/v1.91.9b",
+    "sha256": "8e1bbc76c71d74fef2fb85db7e7ca8eba13d6a86623c54992b60162db554ffdb"
+  },
+  {
+    "name": "json",
+    "url": "https://raw.githubusercontent.com/nlohmann/json/v3.11.3/single_include/nlohmann/json.hpp",
+    "sha256": "9bea4c8066ef4a1c206b2be5a36302f8926f7fdc6087af5d20b417d0cf103ea6"
+  },
+  {
+    "name": "json-license",
+    "url": "https://raw.githubusercontent.com/nlohmann/json/v3.11.3/LICENSE.MIT",
+    "sha256": "86b998c792894ccb911a1cb7994f7a9652894e7a094c0b5e45be2f553f45cf14"
+  },
+  {
+    "name": "stb",
+    "url": "https://raw.githubusercontent.com/nothings/stb/f0569113c93ad095470c54bf34a17b36646bbbb5/stb_image_write.h",
+    "sha256": "cbd5f0ad7a9cf4468affb36354a1d2338034f2c12473cf1a8e32053cb6914a05"
+  }
+]
