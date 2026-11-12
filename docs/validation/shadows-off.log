@@ -1,0 +1,6 @@
+OpenGL: 4.1 Metal - 90.5
+GPU: Apple M5
+Vendor: Apple
+Assets: /Users/bekarysuzbekbaev/Documents/Codex/2026-11-05/chatgpt-conversation-6ad229b5-f7e4-83ed-bd2f/outputs/WeatherWorld/build/bin
+Renderer: depth testing, back-face culling, 2048px PCF shadows, instanced particles initialized
+BENCHMARK {"frames":5000,"sample_frames":4970,"fps":2104.21,"shadows":false,"quality":"high","recording":false,"gpu_synchronized":true,"width":1280,"height":720}

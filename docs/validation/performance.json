@@ -1,0 +1,144 @@
+{
+  "hardware": "Apple M5",
+  "os": "macOS 26.5 arm64",
+  "opengl": "4.1 Metal - 90.5",
+  "resolution": [
+    1280,
+    720
+  ],
+  "measurement": "Uncapped hidden 1280x720 window; glFinish synchronizes completed GPU work before each wall-clock sample; first 30 frames excluded. No GPU timer queries. Results from this Mac, not a lab PC certification.",
+  "runs": [
+    {
+      "scene": "clear",
+      "frames": 5000,
+      "sample_frames": 4970,
+      "fps": 1555.85,
+      "shadows": true,
+      "quality": "high",
+      "recording": false,
+      "gpu_synchronized": true,
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "scene": "shadows-off",
+      "frames": 5000,
+      "sample_frames": 4970,
+      "fps": 2104.21,
+      "shadows": false,
+      "quality": "high",
+      "recording": false,
+      "gpu_synchronized": true,
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "scene": "snow",
+      "frames": 1800,
+      "sample_frames": 1770,
+      "fps": 1364.36,
+      "shadows": true,
+      "quality": "high",
+      "recording": false,
+      "gpu_synchronized": true,
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "scene": "rain",
+      "frames": 1800,
+      "sample_frames": 1770,
+      "fps": 1320.89,
+      "shadows": true,
+      "quality": "high",
+      "recording": false,
+      "gpu_synchronized": true,
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "scene": "storm",
+      "frames": 1800,
+      "sample_frames": 1770,
+      "fps": 1340.24,
+      "shadows": true,
+      "quality": "high",
+      "recording": false,
+      "gpu_synchronized": true,
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "scene": "fog",
+      "frames": 1000,
+      "sample_frames": 970,
+      "fps": 1414.66,
+      "shadows": true,
+      "quality": "high",
+      "recording": false,
+      "gpu_synchronized": true,
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "scene": "cloudy",
+      "frames": 1000,
+      "sample_frames": 970,
+      "fps": 1459.57,
+      "shadows": true,
+      "quality": "high",
+      "recording": false,
+      "gpu_synchronized": true,
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "scene": "night",
+      "frames": 1000,
+      "sample_frames": 970,
+      "fps": 1521.1,
+      "shadows": true,
+      "quality": "high",
+      "recording": false,
+      "gpu_synchronized": true,
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "scene": "low-quality",
+      "frames": 1800,
+      "sample_frames": 1770,
+      "fps": 1334.57,
+      "shadows": true,
+      "quality": "low",
+      "recording": false,
+      "gpu_synchronized": true,
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "scene": "challenge",
+      "frames": 300,
+      "sample_frames": 270,
+      "fps": 1365.12,
+      "shadows": true,
+      "quality": "high",
+      "recording": false,
+      "gpu_synchronized": true,
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "scene": "live",
+      "frames": 4733,
+      "sample_frames": 4703,
+      "fps": 1579.62,
+      "shadows": true,
+      "quality": "high",
+      "recording": false,
+      "gpu_synchronized": true,
+      "width": 1280,
+      "height": 720
+    }
+  ]
+}
