@@ -1,0 +1,35 @@
+{
+  "offline_logic_checks": 145,
+  "ctest": "passed",
+  "modes_rendered": [
+    "clear",
+    "cloudy",
+    "rain",
+    "snow",
+    "storm",
+    "fog",
+    "night",
+    "challenge",
+    "live"
+  ],
+  "opengl_errors": 0,
+  "native_keyboard_checks": [
+    "weather preset",
+    "day/night",
+    "pause",
+    "shadows on/off",
+    "help open/close"
+  ],
+  "help_layout": "visually verified in final app",
+  "live_weather": "Open-Meteo Astana request succeeded",
+  "video": {
+    "path": "docs/WeatherWorld-demo.mp4",
+    "duration_seconds": 70,
+    "width": 1280,
+    "height": 720,
+    "fps": 30,
+    "codec": "H.264",
+    "decode_check": "passed"
+  },
+  "windows_build": "CMake/PowerShell supplied; not run on this Mac"
+}
