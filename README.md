@@ -1,160 +1,233 @@
 # Weather World
 
-Полный проект на **C++17 и OpenGL 3.3 Core** для интерактивной визуализации погоды. Небольшой 3D-мир с домом и деревьями меняет освещение, облака и осадки по данным Open-Meteo или выбранному сценарию. Основная графическая техника проекта — динамические тени с PCF. Все шейдеры находятся в отдельных GLSL-файлах.
+Weather World is a **C++17 / OpenGL 3.3 Core** application for interactive weather visualisation. Its procedural 3D scene changes lighting, clouds, fog and precipitation using manual presets or current weather from Open-Meteo. The main graphics technique is directional shadow mapping with a **3×3 percentage-closer filter (PCF)**.
 
-## Что входит
+**Team:** Bekarys U, Bibarys K, Yeraly T.  
+**Course:** Computer Graphics Fundamentals, Astana IT University, 2026–2027.  
+**Repository:** [bekontaii/CGF-final](https://github.com/bekontaii/CGF-final).
 
-- 3D-сцена с процедурной геометрией, перспективной камерой и управляемым направлением света.
-- Шесть погодных состояний: ясно, облачно, дождь, снег, гроза и туман, плюс день и ночь.
-- Реальная погода для городов из списка, запросы в фоне и обновление каждые 10 минут.
-- Ручной режим для демонстрации всех эффектов без интернета.
-- Карта теней, фильтрация PCF, переключатель техники и два уровня качества.
-- Частицы дождя и снега, движущиеся облака, вспышки молний и ночное освещение.
-- Weather Challenge: шесть раундов по 15 секунд с целью, очками и перезапуском.
-- Интерфейс, справка, FPS, состояние техники и редактируемые данные команды.
-- CMake, исходники зависимостей, тесты логики, отчёт и материалы защиты.
+## Features
 
-Список назначенных тем из Section 6 в исходных требованиях отсутствовал. Название Weather World и техника shadow mapping являются рабочим вариантом. Перед сдачей сверить их с назначенной темой и заполнить данные команды. Проект содержит существенный объём кода, созданного с помощью OpenAI Codex; это раскрыто в отчёте. На защите нужно понимать и уметь изменять шейдеры.
+- Orbit camera, procedural meshes, perspective projection and a movable light.
+- Clear, cloudy, rain, snow, storm and fog presets, plus day/night controls.
+- Dynamic PCF shadows, an on/off comparison and two quality levels.
+- Instanced precipitation, moving clouds and lightning illumination.
+- Background live-weather requests and an offline demonstration mode.
+- A 90-second challenge with six rounds, scoring, a goal and reset.
+- On-screen help, FPS, technique status and team identification.
+- CMake builds, bundled library sources, tests and defence materials.
 
-## Быстрый запуск
+## Get the project
 
-На этом Mac с Apple Silicon откройте **Weather World.app** двойным щелчком или запустите **Start Weather World.command**. Это готовая локальная сборка. Для Windows нужен исходный проект и сборка по инструкции ниже.
+With Git installed, open Terminal on macOS/Linux or PowerShell on Windows:
 
-Распакуйте весь архив. Папки `shaders` и `assets` должны оставаться рядом с исполняемым файлом. Если в комплекте есть готовая сборка для вашей системы, запускайте её из соответствующей папки. Для сборки из исходников используйте инструкции ниже.
+```sh
+git clone https://github.com/bekontaii/CGF-final.git
+cd CGF-final
+```
 
-## Windows 10 и 11
+Alternatively, extract the whole ZIP. The revised submission archive contains `WeatherWorld`; GitHub's Download ZIP normally creates `CGF-final-main`. Open a terminal in that extracted folder.
 
-Нужны Visual Studio 2022 Build Tools с компонентом **Desktop development with C++**, Windows SDK, CMake 3.21 или новее, видеодрайвер с OpenGL 3.3+. Полная Visual Studio IDE не обязательна. Исходники GLFW, GLM, Dear ImGui, GLAD и JSON уже включены в `vendor`; скачивать зависимости во время сборки не требуется.
+**Run all commands below from the folder containing `CMakeLists.txt`, `scripts/`, `src/` and `vendor/`.** Do not run them from inside `src/` or from the ZIP file itself. Use the report and video supplied with the revision you intend to submit; a source clone may contain an older documentation package.
 
-В PowerShell из папки проекта:
+## Quick start on an Apple Silicon Mac
+
+The included ARM64 application does not need a compiler or CMake:
+
+1. Extract the complete project.
+2. Open `Weather World.app`, or double-click `Start Weather World.command`.
+3. Press **F1** for help.
+
+For a reliable offline demonstration, run this from the project folder:
+
+```sh
+"./Weather World.app/Contents/MacOS/WeatherWorld" --no-network --weather clear
+```
+
+This starts the clear scene with shadows enabled. Keep the application bundle intact. The prebuilt app is for Apple Silicon; build from source on other supported systems. If macOS prevents the downloaded app from opening, use the source-build route below or the standard macOS approval controls after reviewing the source.
+
+## Windows 10 or 11
+
+Install **Visual Studio 2022 Build Tools** with **Desktop development with C++** and the Windows SDK, **CMake 3.21+** on `PATH`, and a graphics driver supporting **OpenGL 3.3 Core**. Reopen PowerShell after installation.
+
+From the project folder:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\build-windows.ps1
-powershell -ExecutionPolicy Bypass -File .\scripts\run-windows.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\run-windows.ps1 --no-network --weather clear
 ```
 
-Эквивалентные команды CMake:
+The build script configures CMake, compiles Release binaries and runs tests. The run script forwards its arguments to the application. The executable is `build\bin\Release\WeatherWorld.exe`.
+
+Equivalent direct commands:
 
 ```powershell
 cmake -S . -B build -G "Visual Studio 17 2022" -A x64
 cmake --build build --config Release --parallel
 ctest --test-dir build -C Release --output-on-failure
-.\build\bin\Release\WeatherWorld.exe
+.\build\bin\Release\WeatherWorld.exe --no-network --weather clear
 ```
 
-На Windows для HTTPS используется системный WinHTTP. Отдельные curl, OpenSSL, vcpkg и API-ключ не нужны. Системный `opengl32.dll` предоставляет загрузочную точку входа, остальные функции загружает GLAD. Если окно не создаётся, обновите драйвер видеокарты от производителя. Базовый драйвер удалённого рабочего стола может не предоставлять OpenGL 3.3.
+HTTPS uses Windows WinHTTP. No separate curl installation, API key or private server is needed. A laboratory Windows run is still required; the recorded validation results are from a Mac.
 
-## macOS
+## macOS source build
 
-Нужны Xcode Command Line Tools и CMake 3.21+. Используется системная libcurl. OpenGL на macOS устарел, но проект запрашивает доступный Core context и использует GLSL 330.
+Install Xcode Command Line Tools if missing:
 
 ```sh
 xcode-select --install
-./scripts/build.sh
-./scripts/run.sh
 ```
 
-Прямой вариант:
+Install CMake 3.21+ using its installer or, if Homebrew is already installed:
+
+```sh
+brew install cmake
+```
+
+From the project folder:
+
+```sh
+sh ./scripts/build.sh
+sh ./scripts/run.sh --no-network --weather clear
+```
+
+The build script creates a Release build and runs tests. The executable is `build/bin/WeatherWorld`. Equivalent direct commands:
 
 ```sh
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --parallel
 ctest --test-dir build --output-on-failure
-./build/bin/WeatherWorld
+./build/bin/WeatherWorld --no-network --weather clear
 ```
 
-## Linux
+macOS uses the system libcurl. The application requests a Core OpenGL context and loads GLSL shaders from files.
 
-Для Ubuntu/Debian установите компилятор, CMake, заголовки OpenGL/X11 и libcurl:
+## Linux source build
+
+On Ubuntu/Debian, install the compiler, CMake, OpenGL/X11 headers and libcurl:
 
 ```sh
+sudo apt update
 sudo apt install build-essential cmake libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libcurl4-openssl-dev
-./scripts/build.sh
-./scripts/run.sh
 ```
 
-Нужна графическая сессия с OpenGL 3.3. Флаг `--hidden` скрывает окно, но всё равно требует рабочий графический контекст.
+Confirm that `cmake --version` reports at least 3.21, then run:
 
-## Управление
+```sh
+sh ./scripts/build.sh
+sh ./scripts/run.sh --no-network --weather clear
+```
 
-| Действие | Клавиша или мышь |
+The executable is `build/bin/WeatherWorld`. This build path uses an X11 desktop session with OpenGL 3.3 support. `--hidden` hides the window but still requires a working graphics context.
+
+## First-run check and controls
+
+The application opens a 1280×720 window with a cottage, trees, a left control panel and **PCF shadows ON**. Press **R**, rotate the light with the arrow keys and press **T** twice to compare shadows. Use **3**, **4** and **5** for rain, snow and storm.
+
+| Input | Action |
 |---|---|
-| Ясно / облачно / дождь / снег / гроза / туман | `1` / `2` / `3` / `4` / `5` / `6` |
-| День или ночь | `N` |
-| Пауза анимации | `Space` |
-| Динамические PCF-тени вкл/выкл | `T` |
-| Высокое или низкое качество | `Q` |
-| Повернуть источник света | `←` / `→` или ползунок |
-| Восстановить камеру | `R` |
-| Справка | `F1` или `H` |
-| Обновить реальную погоду | `F` |
-| Вращать камеру | Зажать левую или правую кнопку вне панели |
-| Приблизить или отдалить | Колесо мыши вне панели |
-| Закрыть справку, затем приложение | `Esc` |
+| `1` / `2` / `3` / `4` / `5` / `6` | Clear / cloudy / rain / snow / storm / fog |
+| `N` | Toggle day/night |
+| `Space` | Pause animation and the challenge timer |
+| `T` | Toggle PCF shadows |
+| `Q` | Toggle high/low quality |
+| Left / Right arrow | Rotate the light |
+| Mouse drag outside the panel | Orbit the camera |
+| Mouse wheel outside the panel | Zoom |
+| `R` | Reset the camera |
+| `F` | Refresh live weather |
+| `F1` or `H` | Open/close help |
+| `Esc` | Close help, then exit |
 
-Клавиши ручной погоды переводят приложение в Simulation. Live Mode включается в панели. При ошибке сети отображается причина, а приложение остаётся работоспособным в Simulation. Пресеты не выдаются за реальные данные.
-
-## Реальная погода
-
-Выберите Live Mode и город, затем Refresh. Ответ Open-Meteo содержит температуру, WMO-код, время, признак дня/ночи, облачность, скорость ветра и осадки. Запрос выполняется в отдельной задаче. Окно и анимация продолжают работать, пока сервер отвечает. Ошибки HTTP, JSON и соединения отображаются, TLS-проверка не отключается.
-
-Источник: [Open-Meteo Weather Forecast API](https://open-meteo.com/en/docs). Данные CC BY 4.0, бесплатный endpoint предназначен для некоммерческого использования. Интерфейс показывает модельные текущие условия провайдера. Обновление приложения не означает, что модель выпускает новые данные каждые 10 минут.
+For current provider data, select **Live weather** and a city in the panel. Launching without `--no-network` also starts live mode. Manual weather keys select Simulation. Presets are illustrative and are not presented as live observations. Network failures are displayed, and the offline controls remain available.
 
 ## Weather Challenge
 
-Нажмите **Start Challenge**. В каждом из шести 15-секундных раундов прочитайте цель, выберите погодное состояние и день/ночь, затем нажмите **Submit**. На раунд принимается один ответ. Пропущенный или неверный ответ не приносит очков. Таймер переводит игру к следующему раунду. Цель — 400 очков из 600. Правильный ответ приносит 100 очков. После 90 секунд виден итог, Reset позволяет повторить игру без перезапуска процесса. Пауза останавливает и анимацию, и игровой таймер.
+Click **Start 90-second challenge**. Each of six 15-second rounds asks for a weather condition and day/night state. Select them and click **Submit weather**. One answer is accepted per round; a correct match earns 100 points, while a wrong answer or timeout earns zero. The goal is **400 out of 600**. Use **Play again** or **Reset** without restarting the process. **Space** pauses the game timer as well as animation.
 
-## Демонстрация и снимки
+## Tests and repeatable captures
+
+The build scripts run tests automatically. To rerun them:
 
 ```sh
-./build/bin/WeatherWorld --no-network --weather clear
+# macOS/Linux
+ctest --test-dir build --output-on-failure
+```
+
+```powershell
+# Windows Release build
+ctest --test-dir build -C Release --output-on-failure
+```
+
+Examples below use the macOS/Linux executable. On Windows, replace `./build/bin/WeatherWorld` with `.\build\bin\Release\WeatherWorld.exe`.
+
+```sh
+./build/bin/WeatherWorld --help
 ./build/bin/WeatherWorld --no-network --weather storm --night
 ./build/bin/WeatherWorld --no-network --tour
 ./build/bin/WeatherWorld --no-network --challenge
-./build/bin/WeatherWorld --hidden --no-network --frames 120 --weather snow --screenshot snow.png
-./build/bin/WeatherWorld --hidden --no-network --frames 600 --weather clear --no-shadows
-./build/bin/WeatherWorld --help
+./build/bin/WeatherWorld --hidden --no-network --frames 180 --weather snow --screenshot snow.png
+./build/bin/WeatherWorld --hidden --no-network --frames 5000 --weather clear
+./build/bin/WeatherWorld --hidden --no-network --frames 5000 --weather clear --no-shadows
 ```
 
-`--screenshot` сохраняет PNG последнего кадра вместе с интерфейсом. `--no-shadows` выключает основную технику для сравнения. `--low-quality` снижает размер карты теней и число частиц. В конце ограниченного запуска печатается средний FPS. Сравнивайте одну и ту же сцену, разрешение и положение камеры.
+`--screenshot` saves the last rendered frame including the UI. `--low-quality` reduces the shadow-map resolution and particle count. Limited runs print a `BENCHMARK` record. Compare the same scene, camera, resolution and quality; hidden-window throughput is different from visible presentation FPS.
 
-Для резервного видео можно записать последовательность PNG с фиксированным шагом 1/30 с:
+The revised package was checked on **Apple M5, macOS 27.2.1, OpenGL 4.1 Metal driver 91.7**. The clean Release build passed, CTest passed its target, and the test executable reported **145 passing checks**. Visible runs measured approximately **116–120 FPS at 1280×720**. The [validation folder](docs/validation/review-2026-11-17/) contains the method, output and peak resident-memory measurements. These results do not certify the laboratory Windows PC.
 
-```sh
-./build/bin/WeatherWorld --hidden --no-network --tour --record-dir frames --duration 70
-ffmpeg -framerate 30 -i frames/frame_%05d.png -c:v libx264 -pix_fmt yuv420p -movflags +faststart WeatherWorld-demo.mp4
-```
+## Troubleshooting
 
-Видео создаётся из кадров самой программы. Загрузите MP4 в YouTube или Google Drive, проверьте доступ по ссылке и внесите URL в отчёт. Публикация в аккаунт пользователя не выполняется автоматически.
+| Problem | What to check |
+|---|---|
+| `cmake` is not found | Install CMake 3.21+ and reopen the terminal; check `cmake --version`. |
+| Visual Studio generator is missing | Install the 2022 C++ Build Tools workload and Windows SDK. |
+| A run script says “Build first” | Complete the build and confirm the executable exists at the OS-specific path above. |
+| OpenGL window creation fails | Check the driver and use a graphical desktop with OpenGL 3.3 support. |
+| Shaders or assets cannot be found | Keep `shaders/` and `assets/` beside a source-built executable; CMake copies them automatically. Keep the prebuilt `.app` intact. |
+| Live weather fails | Read the error and use Simulation or `--no-network`; no secret API key is required. |
+| Low frame rate | Press `Q` and retest the same scene and resolution. |
 
-## Структура
+Launch from a terminal to read shader, framebuffer, graphics-context and resource diagnostics.
+
+## Project structure and materials
 
 ```text
-include/        публичные интерфейсы рендера, погоды и игры
-src/            окно и UI, GPU-рендер, сеть и игровая логика
-shaders/        vertex и fragment shaders из файлов
-assets/         team.json и данные приложения
-vendor/         исходники зависимостей и их лицензии
-tests/          независимые тесты WMO, JSON и 90-секундной игры
-scripts/        сборка и запуск Windows/macOS/Linux
-docs/           отчёт, презентация, пояснения и материалы защиты
+include/        Renderer, weather and challenge interfaces
+src/            Application/UI, renderer, networking and game logic
+shaders/        Vertex and fragment shader source files
+assets/         Team configuration and interface font
+vendor/         Bundled library sources and licence notices
+tests/          Offline weather and challenge checks
+scripts/        Build and run helpers
+docs/           Report, slides, recording, evidence and submission notes
 ```
 
-## Что изучить перед защитой
+GLFW, GLM, GLAD, Dear ImGui, JSON and stb sources are bundled; CMake does not download them during the build. The system compiler, graphics libraries and networking prerequisites must still be installed.
 
-1. Проследите, как `WeatherState` меняет параметры сцены и как WMO-код преобразуется в шесть визуальных режимов.
-2. Найдите light-space matrix, depth-only pass и PCF-функцию в GLSL. Объясните сравнение глубины, bias и девять отсчётов фильтра.
-3. Измените направление света. Покажите перемещение теней, затем нажмите `T`.
-4. Объясните model/view/projection, матрицу нормалей, depth testing и back-face culling.
-5. Разберите instanced particles и перенос частиц на верхнюю границу после падения.
-6. Покажите, что сеть не выполняется в графическом цикле, а ошибка не блокирует демонстрацию.
+The revised [report](docs/WeatherWorld_Report.docx) and [PDF](docs/WeatherWorld_Report.pdf) describe the pipeline, actual equations, evaluation and 15 journal studies. The [slides](docs/WeatherWorld_Defence.pptx) and 70-second [backup video](docs/WeatherWorld-demo.mp4) support the defence. Upload the video to YouTube or Google Drive, test link access and insert its URL in the report and `assets/team.json`.
 
-В `docs/DEFENCE_GUIDE.md` есть вопросы, тайминг выступления и задания для самостоятельного изменения кода.
+## Repository-recorded contributions
 
-## Данные команды и сдача
+The mapping below is based on the merged history at [`6177f81`](https://github.com/bekontaii/CGF-final/commit/6177f81b59461050cdf3410f6fbbdab99adc8ae3), inspected on 17 November 2026. It records submitted changes and integration, rather than asserting that every line was independently authored without assistance.
 
-Отредактируйте `assets/team.json`: название команды, группу, точный номер/название темы и участников с их фактическими модулями. После изменения заново соберите, чтобы CMake скопировал актуальные данные к программе. Согласуйте те же сведения в отчёте и на титульном слайде. Поле `backup_video_url` предусмотрено для доступной ссылки на видео.
+| Participant | Module and recorded contribution | Evidence |
+|---|---|---|
+| Bekarys U (`bekontaii`) | Weather/Open-Meteo integration, challenge logic, weather tests and validation results | [PR #1](https://github.com/bekontaii/CGF-final/pull/1), [PR #3](https://github.com/bekontaii/CGF-final/pull/3) |
+| Bibarys K (`BibarysKadirbay`) | Application/UI, build configuration and dependencies, original documentation and demo package | [PR #2](https://github.com/bekontaii/CGF-final/pull/2), [PR #4](https://github.com/bekontaii/CGF-final/pull/4) |
+| Yeraly T (`YeralYerte`) | Renderer, scene/shadow/sky/particle shaders and graphics screenshots | [PR #5](https://github.com/bekontaii/CGF-final/pull/5) |
 
-Назначенная тема и техника должны соответствовать официальному Topic List. В данном комплекте нельзя честно отметить неизвестный Section 6 как выполненный. В приложенных материалах это выделено как незавершённое организационное поле. Windows-путь сборки предоставлен, но локальные результаты проверки относятся только к среде, указанной в отчёте.
+Section **9.2 of the report** provides the file and commit evidence. The later report rewrite and package revisions are disclosed separately and are not attributed to the original repository commits.
 
-Лицензии и источники перечислены в [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Учебный проект предоставляется под MIT.
+## Remaining submission fields
+
+Confirm the group, official topic number and exact title, the topic-specific checklist, the accessible video URL and the actual submission date. Test a clean build and visible FPS on the laboratory Windows PC. See [SUBMISSION.md](docs/SUBMISSION.md).
+
+After editing `assets/team.json`, rebuild to copy the current configuration to the executable directory. Keep the report, slides and any prebuilt application consistent. The assignment document refers to a Section 6 topic list that was not included, so the working title must be checked against the official allocation.
+
+## Sources, licences and assistance
+
+Live conditions come from the [Open-Meteo Weather Forecast API](https://open-meteo.com/en/docs). Its data is licensed under CC BY 4.0; the free endpoint is intended for non-commercial use under the [provider's terms](https://open-meteo.com/en/terms). The displayed values are provider model-based current conditions, not readings from a sensor attached to the application.
+
+Project geometry and surface patterns are procedural. No paid model or texture pack is included. Library, font and data notices are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md); the project is distributed under [MIT](LICENSE).
+
+Substantial code, shader and documentation assistance from OpenAI Codex is disclosed in the report. Preserve that disclosure and all upstream licences. Every teammate must be able to explain and modify the light-space transform, depth comparison, bias and PCF sampling during the defence.
