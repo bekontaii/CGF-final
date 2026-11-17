@@ -218,11 +218,6 @@ The mapping below is based on the merged history at [`6177f81`](https://github.c
 
 Section **9.2 of the report** provides the file and commit evidence. The later report rewrite and package revisions are disclosed separately and are not attributed to the original repository commits.
 
-## Remaining submission fields
-
-Confirm the group, official topic number and exact title, the topic-specific checklist, the accessible video URL and the actual submission date. Test a clean build and visible FPS on the laboratory Windows PC. See [SUBMISSION.md](docs/SUBMISSION.md).
-
-After editing `assets/team.json`, rebuild to copy the current configuration to the executable directory. Keep the report, slides and any prebuilt application consistent. The assignment document refers to a Section 6 topic list that was not included, so the working title must be checked against the official allocation.
 
 ## Sources, licences and assistance
 
