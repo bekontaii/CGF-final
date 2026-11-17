@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>Weather World</string>
+	<key>CFBundleExecutable</key>
+	<string>WeatherWorld</string>
+	<key>CFBundleIdentifier</key>
+	<string>edu.weatherworld.app</string>
+	<key>CFBundleName</key>
+	<string>Weather World</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0</string>
+	<key>NSHighResolutionCapable</key>
+	<false/>
+	<key>NSHumanReadableCopyright</key>
+	<string>MIT. See source and THIRD_PARTY_NOTICES.md.</string>
+</dict>
+</plist>
